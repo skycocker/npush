@@ -1,0 +1,4 @@
+{
+  "npush_secret": "put_your_npush_secret_here",
+  "port": "80"
+}
