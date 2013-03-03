@@ -5,10 +5,12 @@ var express = require('express')
   , io = require('socket.io').listen(server)
   , fs = require('fs')
   
-var sockets = {}
+var sockets = {};
 npush.use(express.bodyParser());
 
-server.listen(8080);
+var config = require('./config.json');
+
+server.listen(config.listen_port);
 //
 
 npush.post('/', function(req, res) {
