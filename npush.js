@@ -8,12 +8,13 @@ var express = require('express')
 var sockets = {};
 npush.use(express.bodyParser());
 
+var listen_port = null;
 fs.existsSync("./config.json", function(exists) {
   if(exists) {
     var config = require('./config.json');
-    var listen_port = config.listen_port;
+    listen_port = config.listen_port;
   } else {
-    var listen_port = process.env.listen_port;
+    listen_port = process.env.PORT;
   }
 });
 
