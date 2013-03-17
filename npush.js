@@ -8,7 +8,7 @@ var express = require('express')
 var sockets = {};
 npush.use(express.bodyParser());
 
-fs.exists("./config.json", function(exists) {
+fs.existsSync("./config.json", function(exists) {
   if(exists) {
     var config = require('./config.json');
     var listen_port = config.listen_port;
