@@ -8,17 +8,14 @@ var express = require('express')
 var sockets = {};
 npush.use(express.bodyParser());
 
-var listen_port = null;
-fs.existsSync("./config.json", function(exists) {
+fs.exists("./config.json", function(exists) {
   if(exists) {
     var config = require('./config.json');
-    listen_port = config.listen_port;
+    server.listen(config.listen_port);
   } else {
-    listen_port = process.env.PORT;
+    server.listen(process.env.PORT);
   }
 });
-
-server.listen(listen_port);
 //
 
 npush.post('/', function(req, res) {
