@@ -3,19 +3,28 @@ var express = require('express')
   , npush = express()
   , server = require('http').createServer(npush)
   , io = require('socket.io').listen(server)
-  , fs = require('fs')
   
 var secret = process.env.SECRET;
+var listen_port = process.env.PORT;
+var technique = process.env.TECHNIQUE;
 var sockets = {};
 npush.use(express.bodyParser());
 
-server.listen(process.env.PORT);
+server.listen(listen_port);
 //
 
+//socket.io config
+if(technique == 'long-polling') {
+  io.configure(function() {
+    io.set("transports", ["xhr-polling"]);
+    io.set("polling duration", 10);
+  });
+}
+//
+
+//receiving push
 npush.post('/', function(req, res) {
-  
   var remote_secret = req.param('secret');
-  
   if(remote_secret == secret) {
     var eventName = req.param('event');
     var obj = req.param('obj');
@@ -35,15 +44,9 @@ npush.post('/', function(req, res) {
     res.send(401);
   }
 });
-
-//socket.io
-//This should happen only if Heroku detected
-io.configure(function() {
-  io.set("transports", ["xhr-polling"]);
-  io.set("polling duration", 10);
-});
 //
 
+//pushing
 io.sockets.on('connection', function(socket) {
   socket.emit('connection', { status: 'connected! :)' } );
   socket.on('set id', function(data) {
@@ -55,3 +58,4 @@ io.sockets.on('connection', function(socket) {
     socket.join(data.channel);
   });
 });
+//
