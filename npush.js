@@ -8,14 +8,7 @@ var express = require('express')
 var sockets = {};
 npush.use(express.bodyParser());
 
-fs.exists("./config.json", function(exists) {
-  if(exists) {
-    var config = require('./config.json');
-    server.listen(config.listen_port);
-  } else {
-    server.listen(process.env.PORT);
-  }
-});
+server.listen(process.env.PORT);
 //
 
 npush.post('/', function(req, res) {
